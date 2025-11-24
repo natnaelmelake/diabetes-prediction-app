@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Diabetes Predictor</title>
+
+    <!-- Bootstrap CSS -->
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+        rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f7fa;
+        }
+        .container-box {
+            max-width: 750px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .title {
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .prediction-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-box">
+    <h2 class="title">Diabetes Risk Prediction</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Age</label>
+                <input type="number" name="age" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Gender</label>
+                <select name="gender" class="form-control">
+                    <option value="0">Female</option>
+                    <option value="1">Male</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Pulse Rate</label>
+                <input type="number" name="pulse_rate" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Systolic BP</label>
+                <input type="number" name="systolic_bp" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Diastolic BP</label>
+                <input type="number" name="diastolic_bp" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Glucose</label>
+                <input type="number" step="0.01" name="glucose" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>BMI</label>
+                <input type="number" step="0.01" name="bmi" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Family Diabetes History</label>
+                <select name="family_diabetes" class="form-control">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Hypertensive</label>
+                <select name="hypertensive" class="form-control">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Family Hypertension</label>
+                <select name="family_hypertension" class="form-control">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Cardiovascular Disease</label>
+                <select name="cardiovascular_disease" class="form-control">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Stroke</label>
+                <select name="stroke" class="form-control">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-2">Predict</button>
+    </form>
+
+    {% if prediction %}
+        <div class="prediction-box
+            {% if prediction == 'Diabetic' %}
+                bg-danger text-white
+            {% else %}
+                bg-success text-white
+            {% endif %}
+        ">
+            Prediction: {{ prediction }}
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
+
+
+<!-- third -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Predictor</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border: #dee2e6;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 4px;
+            font-weight: normal;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: var(--light);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+            background-color: white;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 16px;
+            background: #e8f6ff;
+            border-left: 5px solid var(--primary);
+            border-radius: 8px;
+            color: #004c8c;
+            font-weight: 600;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .required:after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Diabetes Prediction</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="required">Age</label>
+                <input type="number" name="age" min="1" max="120" required>
+                <div class="input-hint">Enter your age in years</div>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Gender</label>
+                <select name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="0">Female</option>
+                    <option value="1">Male</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="required">Systolic BP</label>
+                    <input type="number" name="systolic_bp" min="50" max="250" required>
+                    <div class="input-hint">mmHg</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="required">Diastolic BP</label>
+                    <input type="number" name="diastolic_bp" min="30" max="150" required>
+                    <div class="input-hint">mmHg</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Pulse Rate</label>
+                <input type="number" name="pulse_rate" min="30" max="200" required>
+                <div class="input-hint">Beats per minute</div>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Glucose Level</label>
+                <input type="number" step="0.01" name="glucose" min="0" max="500" required>
+                <div class="input-hint">mg/dL</div>
+            </div>
+
+            <div class="form-group">
+                <label class="required">BMI</label>
+                <input type="number" step="0.01" name="bmi" min="10" max="70" required>
+                <div class="input-hint">Body Mass Index</div>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Family History of Diabetes</label>
+                <select name="family_diabetes" required>
+                    <option value="">Select Option</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Hypertensive</label>
+                <select name="hypertensive" required>
+                    <option value="">Select Option</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Family History of Hypertension</label>
+                <select name="family_hypertension" required>
+                    <option value="">Select Option</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Cardiovascular Disease</label>
+                <select name="cardiovascular_disease" required>
+                    <option value="">Select Option</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">History of Stroke</label>
+                <select name="stroke" required>
+                    <option value="">Select Option</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <button type="submit">
+                Predict Diabetes Risk
+            </button>
+        </form>
+
+        {% if prediction %}
+            <div class="result">
+                Prediction Result: {{ prediction }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diabetes Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            width: 420px;
+            padding: 25px 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            color: #444;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 12px;
+            background: #e8f6ff;
+            border-left: 5px solid #007bff;
+            border-radius: 6px;
+            color: #004c8c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Diabetes Prediction</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label>Age</label>
+            <input type="number" name="age" required>
+
+            <label>Gender</label>
+            <select name="gender">
+                <option value="0">Female</option>
+                <option value="1">Male</option>
+            </select>
+
+            <label>Pulse Rate</label>
+            <input type="number" name="pulse_rate" required>
+
+            <label>Systolic BP</label>
+            <input type="number" name="systolic_bp" required>
+
+            <label>Diastolic BP</label>
+            <input type="number" name="diastolic_bp" required>
+
+            <label>Glucose</label>
+            <input type="number" step="0.01" name="glucose" required>
+
+            <label>BMI</label>
+            <input type="number" step="0.01" name="bmi" required>
+
+            <label>Family Diabetes</label>
+            <input type="number" name="family_diabetes" required>
+
+            <label>Hypertensive</label>
+            <input type="number" name="hypertensive" required>
+
+            <label>Family Hypertension</label>
+            <input type="number" name="family_hypertension" required>
+
+            <label>Cardiovascular Disease</label>
+            <input type="number" name="cardiovascular_disease" required>
+
+            <label>Stroke</label>
+            <input type="number" name="stroke" required>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction %}
+            <div class="result">
+                Result: {{ prediction }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html> -->
+
+
+
+
+<!-- baseline -->
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Diabetes Predictor</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        input, select { margin: 5px; padding: 5px; }
+        button { padding: 5px 10px; }
+    </style>
+</head>
+<body>
+    <h1>Diabetes Prediction</h1>
+    <form method="post">
+        {% csrf_token %}
+        Age: <input type="number" name="age" required><br>
+        Gender: 
+        <select name="gender">
+            <option value="0">Female</option>
+            <option value="1">Male</option>
+        </select><br>
+        Pulse Rate: <input type="number" name="pulse_rate" required><br>
+        Systolic BP: <input type="number" name="systolic_bp" required><br>
+        Diastolic BP: <input type="number" name="diastolic_bp" required><br>
+        Glucose: <input type="number" step="0.01" name="glucose" required><br>
+        BMI: <input type="number" step="0.01" name="bmi" required><br>
+        Family Diabetes: <input type="number" name="family_diabetes" required><br>
+        Hypertensive: <input type="number" name="hypertensive" required><br>
+        Family Hypertension: <input type="number" name="family_hypertension" required><br>
+        Cardiovascular Disease: <input type="number" name="cardiovascular_disease" required><br>
+        Stroke: <input type="number" name="stroke" required><br>
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction %}
+        <h2>Result: {{ prediction }}</h2>
+    {% endif %}
+</body>
+</html> -->
+
+
